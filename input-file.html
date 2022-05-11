@@ -29,20 +29,24 @@ async function doit() {
     var reader = new FileReader();
     reader.readAsBinaryString(file);
     reader.onload = evt => { 
-        content = evt.target.result; 
+        content = evt.target.result;
         try {
         var output = pyodide.runPython(
 `from js import content
 
-print(content[:10])
+with open("input.jpg", "wb") as f:
+          f.write(content.encode())
         
 from fido import fido
-        
-fido.main(['fido'])
+import sys
+
+sys.argv = ['fido', 'input.jpg']
+
+fido.main()
         `);
         outputLog.value += output;
         } catch (err) {
-          addToOutput(err);
+          outputLog.value += err;
         }
       /*
       For downloading the output
