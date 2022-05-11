@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">window.languagePluginUrl = 'https://pyodide-cdn2.iodide.io/v0.15.0/full/';</script>
+<script src="https://pyodide-cdn2.iodide.io/v0.15.0/full/pyodide.js"></script>
+</head>
+<body>
+<input type="file" onchange="doit();" id="file"/>
+<div>Output:</div>
+<textarea id="output" style="width: 100%;" rows="6" disabled></textarea>
+  
+<script type="text/javascript">
+var content = null;
+
+function doit() {
+    const outputLog = document.getElementById("output");
+    outputLog.value += "DOING IT\n";
+    var file = document.getElementById("file").files[0];
+    var reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = evt => { 
+        content = evt.target.result; 
+        var output = pyodide.runPython('from js import content\ncontent');
+        outputLog.value += output;
+        var l = output.length;
+        var array = new Uint8Array(l);
+        for (var i = 0; i < l; i++) {
+            array[i] = output.charCodeAt(i);
+        }
+        var blob = new Blob([array], {type: 'application/octet-stream'});
+        var elem = window.document.createElement('a');
+        elem.href = window.URL.createObjectURL(blob);
+        elem.download = 'output.pdf';
+        document.body.appendChild(elem);
+        //elem.click();        
+        //document.body.removeChild(elem);
+    }
+}
+
+languagePluginLoader.then(function () {
+    console.log('Ready');
+});
+</script>
+</body>
