@@ -13,18 +13,23 @@
 
 <script type="text/javascript">
 var content = null;
-  
-async function doit() {
 
-  const outputLog = document.getElementById("output");
-  let pyodide = await loadPyodide();
+      async function main() {
+        let pyodide = await loadPyodide();
   await pyodide.loadPackage("micropip");
   await pyodide.runPythonAsync(`
   import micropip
   await micropip.install("https://cdn.glitch.global/f8da79db-ea7c-4974-a19e-5d782bb065e6/olefile-0.46-py2.py3-none-any.whl")
   await micropip.install("https://cdn.glitch.global/f8da79db-ea7c-4974-a19e-5d782bb065e6/opf_fido-1.4.1-py3-none-any.whl")
 `);
-    outputLog.value += "DOING IT\n";
+        return pyodide;
+      }
+      let pyodideReadyPromise = main();
+
+async function doit() {
+        let pyodide = await pyodideReadyPromise;  
+
+  const outputLog = document.getElementById("output");
     var file = document.getElementById("file").files[0];
     var reader = new FileReader();
     reader.readAsBinaryString(file);
@@ -39,12 +44,17 @@ with open("input.jpg", "wb") as f:
         
 from fido import fido
 import sys
+import io
+
+sys.stdout = io.StringIO()
 
 sys.argv = ['fido', 'input.jpg']
 
 fido.main()
         `);
-        outputLog.value += output;
+          const stdout = pyodide.runPython("sys.stdout.getvalue()");
+
+        outputLog.value += stdout;
         } catch (err) {
           outputLog.value += err;
         }
