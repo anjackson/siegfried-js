@@ -9,6 +9,19 @@
 <div>Output:</div>
 <textarea id="output" style="width: 100%;" rows="6" disabled></textarea>
   
+      <script type="text/javascript">
+      async function main() {
+        let pyodide = await loadPyodide();
+        await pyodide.loadPackage("micropip");
+        await pyodide.runPythonAsync(`
+        import micropip
+        await micropip.install('https://github.com/anjackson/fido/releases/download/v1.4.1/olefile-0.46-py2.py3-none-any.whl')
+        await micropip.install('https://github.com/anjackson/fido/releases/download/v1.4.1/opf_fido-1.4.1-py3-none-any.whl')
+      `);
+      }
+      main();
+    </script>
+
 <script type="text/javascript">
 var content = null;
 
@@ -20,8 +33,18 @@ function doit() {
     reader.readAsBinaryString(file);
     reader.onload = evt => { 
         content = evt.target.result; 
-        var output = pyodide.runPython('from js import content\ncontent');
+        var output = pyodide.runPython(
+`from js import content
+
+print(content[:10])
+        
+from fido import fido
+        
+fido.main(['fido'])
+        `);
         outputLog.value += output;
+      /*
+      For downloading the output
         var l = output.length;
         var array = new Uint8Array(l);
         for (var i = 0; i < l; i++) {
@@ -34,6 +57,7 @@ function doit() {
         document.body.appendChild(elem);
         //elem.click();        
         //document.body.removeChild(elem);
+        */
     }
 }
 
