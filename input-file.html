@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript">window.languagePluginUrl = 'https://pyodide-cdn2.iodide.io/v0.15.0/full/';</script>
-<script src="https://pyodide-cdn2.iodide.io/v0.15.0/full/pyodide.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
 </head>
 <body>
 <input type="file" onchange="doit();" id="file"/>
@@ -10,23 +9,26 @@
 <textarea id="output" style="width: 100%;" rows="6" disabled></textarea>
   
       <script type="text/javascript">
-      async function main() {
-        let pyodide = await loadPyodide();
-        await pyodide.loadPackage("micropip");
-        await pyodide.runPythonAsync(`
-        import micropip
-        await micropip.install('https://github.com/anjackson/fido/releases/download/v1.4.1/olefile-0.46-py2.py3-none-any.whl')
-        await micropip.install('https://github.com/anjackson/fido/releases/download/v1.4.1/opf_fido-1.4.1-py3-none-any.whl')
-      `);
-      }
-      main();
     </script>
 
 <script type="text/javascript">
 var content = null;
 
-function doit() {
-    const outputLog = document.getElementById("output");
+        async function main() {
+        let pyodide = await loadPyodide();
+        await pyodide.loadPackage("micropip");
+        await pyodide.runPythonAsync(`
+        import micropip
+        await micropip.install("https://cdn.gitch.global/f8da79db-ea7c-4974-a19e-5d782bb065e6/olefile-0.46-py2.py3-none-any.whl")
+        await micropip.install("https://cdn.glitch.global/f8da79db-ea7c-4974-a19e-5d782bb065e6/opf_fido-1.4.1-py3-none-any.whl")
+      `);
+      }
+      main();
+
+  
+async function doit() {
+
+  const outputLog = document.getElementById("output");
     outputLog.value += "DOING IT\n";
     var file = document.getElementById("file").files[0];
     var reader = new FileReader();
