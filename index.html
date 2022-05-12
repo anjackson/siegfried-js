@@ -40,22 +40,24 @@ async function doit() {
   outputLog.value = "";
     var file = document.getElementById("file").files[0];
     var reader = new FileReader();
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
     reader.onload = evt => { 
         content = evt.target.result;
         filename = file.name;
         try {
         var output = pyodide.runPython(
 `from js import filename, content
-
-with open(filename, "wb") as f:
-          f.write(content.encode())
-        
-from fido import fido
 import sys
 import io
 
 sys.stdout = io.StringIO()
+
+bin = content.to_bytes()
+
+with open(filename, "wb") as f:
+          f.write(bin)
+        
+from fido import fido
 
 sys.argv = ['fido', filename]
 
