@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="https://glitch.com/favicon.ico" />
+    <title>Fido JS - Identify file formats without leaving your browser</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
+  
+    <!-- Import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+  
 </head>
 <body>
   
@@ -9,8 +17,15 @@
     Fido JS
   </h1>
   <p>
-    This web page will run the Fido format identification tool on any file you give to it.  It runs entirely in your browser. It uses Pyodide to make this possible.
+    This web page will run the <a href="https://github.com/openpreserve/fido">Fido format identification tool</a> on any file you give to it.  It runs entirely in your browser, via <a href="https://pyodide.org/">Pyodide</a>.
   </p>
+  <p>
+    You could also try <a href="https://www.itforarchivists.com/siegfried">dragging a file on to Siegfried's anvil!</a>, which is similar web service that works by sending your file to server that runs Siegfried on it.
+  </p>
+  <p>
+    
+  </p>
+  <hr>
 <input type="file" onchange="doit();" id="file"/>
 <div>Output:</div>
 <textarea id="output" style="width: 100%;" rows="6" disabled></textarea>
@@ -88,6 +103,8 @@ fido.main()
 }
 
 </script>
+  
+  <hr>
 
     <!-- The footer holds our remix button — you can use it for structure or cut it out ✂ -->
     <footer class="footer">
