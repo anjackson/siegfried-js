@@ -12,27 +12,45 @@
   
 </head>
 <body>
-  
-  <h1>
+
+    <div class="wrapper">
+    <div class="content" role="main">
+
+  <h1 class="title">
     Fido JS
   </h1>
+  <div class="instructions">
   <p>
-    This web page will run the <a href="https://github.com/openpreserve/fido">Fido format identification tool</a> on any file you give to it.  It runs entirely in your browser, via <a href="https://pyodide.org/">Pyodide</a>.
+    This web page will run the <a href="https://github.com/openpreserve/fido">Fido format identification tool</a> (v1.4.1) on any file you give to it.  It runs entirely in your browser, via <a href="https://pyodide.org/">Pyodide</a>.
   </p>
+<input type="file" onchange="doit();" id="file" style="width: 100%"/>
+<div>Output:</div>
+    <textarea id="output" style="width: 100%;" rows="10" disabled></textarea>
+
+
   <p>
     You could also try <a href="https://www.itforarchivists.com/siegfried">dragging a file on to Siegfried's anvil!</a>, which is similar web service that works by sending your file to server that runs Siegfried on it.
   </p>
-  <p>
-    
-  </p>
-  <hr>
-<input type="file" onchange="doit();" id="file"/>
-<div>Output:</div>
-<textarea id="output" style="width: 100%;" rows="6" disabled></textarea>
+        </div>
+      </div>
+  </div>
   
-      <script type="text/javascript">
-    </script>
-
+    <!-- The footer holds our remix button — you can use it for structure or cut it out ✂ -->
+    <footer class="footer">
+      <div class="links"></div>
+      <a
+        class="btn--remix"
+        target="_top"
+        href="https://glitch.com/edit/#!/remix/fido-js"
+      >
+        <img
+          src="https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2FLogo_Color.svg?v=1618199565140"
+          alt=""
+        />
+        Remix on Glitch
+      </a>
+    </footer>
+  
 <script type="text/javascript">
 var content = null;
 
@@ -76,7 +94,7 @@ from fido import fido
 
 sys.argv = ['fido', filename]
 
-fido.main()
+fido.main(sys.argv)
         `);
           const stdout = pyodide.runPython("sys.stdout.getvalue()");
 
@@ -104,22 +122,5 @@ fido.main()
 
 </script>
   
-  <hr>
-
-    <!-- The footer holds our remix button — you can use it for structure or cut it out ✂ -->
-    <footer class="footer">
-      <div class="links"></div>
-      <a
-        class="btn--remix"
-        target="_top"
-        href="https://glitch.com/edit/#!/remix/fido-js"
-      >
-        <img
-          src="https://cdn.glitch.com/605e2a51-d45f-4d87-a285-9410ad350515%2FLogo_Color.svg?v=1618199565140"
-          alt=""
-        />
-        Remix on Glitch
-      </a>
-    </footer>
 </body>
 </html>
