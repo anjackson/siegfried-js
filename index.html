@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="https://glitch.com/favicon.ico" />
-    <title>Fido JS - Identify file formats without leaving your browser</title>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
+    <title>Siegfried JS - Identify file formats without leaving your browser</title>
   
     <!-- Import the webpage's stylesheet -->
     <link rel="stylesheet" href="/style.css" />
@@ -17,21 +16,48 @@
     <div class="content" role="main">
 
   <h1 class="title">
-    Fido JS
+    Siegfried JS
   </h1>
   <div class="instructions">
   <p>
-    This web page will run the <a href="https://github.com/openpreserve/fido">Fido format identification tool</a> (v1.4.1) on any file you give to it.  It runs entirely in your browser, via <a href="https://pyodide.org/">Pyodide</a>.
+    This web page will run the <a href="https://www.itforarchivists.com/siegfried">Siegfried format identification tool</a> (v1.9.2-PATCH) on any file you give to it.  It runs entirely in your browser, via <a href="">Go WebAssembly</a>.
   </p>
-<input type="file" onchange="doit();" id="file" style="width: 100%"/>
-<div>Output:</div>
-    <textarea id="output" style="width: 100%;" rows="10" disabled></textarea>
 
+    	<!--
+	Add the following polyfill for Microsoft Edge 17/18 support:
+	<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
+	(see https://caniuse.com/#feat=textencoder)
+	-->
+	<script src="wasm_exec.js"></script>
+	<script>
+		if (!WebAssembly.instantiateStreaming) { // polyfill
+			WebAssembly.instantiateStreaming = async (resp, importObject) => {
+				const source = await (await resp).arrayBuffer();
+				return await WebAssembly.instantiate(source, importObject);
+			};
+		}
 
-  <p>
-    You could also try <a href="https://www.itforarchivists.com/siegfried">dragging a file on to Siegfried's anvil!</a>, which is similar web service that works by sending your file to server that runs Siegfried on it.
-  </p>
-        </div>
+		const go = new Go();
+                //go.env = { 'USER' : "", 'HOME': "" }
+		let mod, inst;
+		WebAssembly.instantiateStreaming(fetch("wasmtest.wasm"), go.importObject).then((result) => {
+			mod = result.module;
+			inst = result.instance;
+			document.getElementById("runButton").disabled = false;
+		}).catch((err) => {
+			console.error(err);
+		});
+
+		async function run() {
+			console.clear();
+			await go.run(inst);
+			inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+		}
+	</script>
+
+	<button onclick="run();" id="runButton" disabled>Run</button>
+    
+      </div>
       </div>
   </div>
   
@@ -51,76 +77,6 @@
       </a>
     </footer>
   
-<script type="text/javascript">
-var content = null;
 
-      async function main() {
-        let pyodide = await loadPyodide();
-  await pyodide.loadPackage("micropip");
-  await pyodide.runPythonAsync(`
-  import micropip
-  await micropip.install("https://cdn.glitch.global/f8da79db-ea7c-4974-a19e-5d782bb065e6/olefile-0.46-py2.py3-none-any.whl")
-  await micropip.install("https://cdn.glitch.global/f8da79db-ea7c-4974-a19e-5d782bb065e6/opf_fido-1.4.1-py3-none-any.whl")
-`);
-        return pyodide;
-      }
-      let pyodideReadyPromise = main();
-
-async function doit() {
-        let pyodide = await pyodideReadyPromise;  
-
-  const outputLog = document.getElementById("output");
-  outputLog.value = "";
-    var file = document.getElementById("file").files[0];
-    var reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.onload = evt => { 
-        content = evt.target.result;
-        filename = file.name;
-        try {
-        var output = pyodide.runPython(
-`from js import filename, content
-import sys
-import io
-
-sys.stdout = io.StringIO()
-
-bin = content.to_bytes()
-
-with open(filename, "wb") as f:
-          f.write(bin)
-        
-from fido import fido
-
-sys.argv = ['fido', filename]
-
-fido.main(sys.argv)
-        `);
-          const stdout = pyodide.runPython("sys.stdout.getvalue()");
-
-        outputLog.value += stdout;
-        } catch (err) {
-          outputLog.value += err;
-        }
-      /*
-      For downloading the output
-        var l = output.length;
-        var array = new Uint8Array(l);
-        for (var i = 0; i < l; i++) {
-            array[i] = output.charCodeAt(i);
-        }
-        var blob = new Blob([array], {type: 'application/octet-stream'});
-        var elem = window.document.createElement('a');
-        elem.href = window.URL.createObjectURL(blob);
-        elem.download = 'output.pdf';
-        document.body.appendChild(elem);
-        //elem.click();        
-        //document.body.removeChild(elem);
-        */
-    }
-}
-
-</script>
-  
 </body>
 </html>
