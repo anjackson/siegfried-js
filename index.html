@@ -20,7 +20,7 @@
   </h1>
   <div class="instructions">
   <p>
-    This web page will run the <a href="https://www.itforarchivists.com/siegfried">Siegfried format identification tool</a> (v1.9.2-PATCH) on any file you give to it.  It runs entirely in your browser, via <a href="">Go WebAssembly</a>.
+    This web page will run the <a href="https://www.itforarchivists.com/siegfried">Siegfried format identification tool</a> (v1.9.2-PATCH) on any file you give to it.  It runs entirely in your browser, via <a href="https://github.com/golang/go/wiki/WebAssembly">Go WebAssembly</a>.
   </p>
 
     	<!--
@@ -56,6 +56,9 @@
 	</script>
 
 	<button onclick="run();" id="runButton" disabled>Run</button>
+    
+                    <input type="file" id="fileInput"><br>
+                <output id="fileOutput"></output>
     
       </div>
       </div>
