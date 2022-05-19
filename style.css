@@ -135,7 +135,7 @@ body {
   font-family: HK Grotesk;
   font-style: normal;
   font-weight: bold;
-  font-size: 70px;
+  font-size: 60px;
   line-height: 105%;
   margin: 0;
 }
@@ -186,9 +186,10 @@ h2 {
 /*
 Style the output box:
 */
-#output {
+.output {
   width: 100%;
   min-height: 100px;
   background-color: #ffffffc0;
   border: 1px solr grey;
+  overflow: scroll;
 }
