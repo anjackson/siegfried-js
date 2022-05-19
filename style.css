@@ -187,9 +187,12 @@ h2 {
 Style the output box:
 */
 .output {
-  width: 100%;
+}
+.output pre {
+  width: 85vw;
   min-height: 100px;
   background-color: #ffffffc0;
   border: 1px solr grey;
-  overflow: scroll;
+  overflow-x: scroll;
+  font-size: small;
 }
