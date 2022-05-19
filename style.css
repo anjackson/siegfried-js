@@ -182,3 +182,13 @@ h2 {
 .dipped {
   transform: translateY(5px);
 }
+
+/*
+Style the output box:
+*/
+#output {
+  width: 100%;
+  min-height: 100px;
+  background-color: #ffffffc0;
+  border: 1px solr grey;
+}

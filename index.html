@@ -22,9 +22,23 @@
   <p>
     This web page will run the <a href="https://www.itforarchivists.com/siegfried">Siegfried format identification tool</a> (v1.9.2-PATCH) on any file you give to it.  It runs entirely in your browser, via <a href="https://github.com/golang/go/wiki/WebAssembly">Go WebAssembly</a>.
   </p>
+  <label for="sig-select">Choose a signature set:</label>
+
+<select name="signatures" id="sig-select" onchange="restart();">
+  <option value="sfsigs/default.sig">Default</option>
+  <option value="sfsigs/deluxe.sig">Deluxe</option>
+  <option value="sfsigs/archivematica.sig">Archivematica</option>
+  <option value="sfsigs/freedesktop.sig">Free Desktop</option>
+  <option value="sfsigs/loc.sig">Library of Congress</option>
+  <option value="sfsigs/tika.sig">Tika</option>
+  <option value="sfsigs/pronom-tika-loc.sig">PRONOM + Tika + LOC</option>
+  <option value="sfsigs/wikidata.sig">WikiData</option>
+  <option value="sfsigs/wikidata-nopronom.sig">WikiData (no PRONOM)</option>
+</select>
+
     <input type="file" id="fileInput" disabled><br>
     <div>Output:</div>
-    <textarea id="output" style="width: 100%;" rows="10" disabled=""></textarea>
+    <pre id="output"></pre>
     </div>
     </div>
   </div>
@@ -75,9 +89,13 @@
 			console.error(err);
 		});
 
-		async function runAndReset() {
-			await go.run(inst);
+		async function restart() {
+      // Disable the interface:
+			document.getElementById("fileInput").disabled = false;
 			inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+			await go.run(inst);
+      // Enable the interface:
+			document.getElementById("fileInput").disabled = false;
 		}
 
 	</script>

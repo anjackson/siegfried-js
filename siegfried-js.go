@@ -13,7 +13,13 @@ import (
 func main() {
 	quit := make(chan struct{}, 0)
 
-	resp, err := http.Get("sfsigs/default.sfsig")
+	// Pick up the selected sig file:
+	ss := js.Global().Get("sig-select")
+	sigSelected := ss.Get("value").String() //.Get(ss.Get("selectedIndex").String()).Get("value").String()
+
+	log.Print(sigSelected)
+
+	resp, err := http.Get(sigSelected)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,9 +74,14 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
+
 			out = ""
 			for _, id := range ids {
-				out = out + id.String() + " "
+				out = out + id.String() + ":\n"
+				res := s.Label(id)
+				for _, value := range res {
+					out = out + "    " + value[0] + ": " + value[1] + "\n"
+				}
 			}
 			fileOutput.Set("innerText", out)
 
