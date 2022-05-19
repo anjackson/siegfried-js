@@ -189,7 +189,7 @@ Style the output box:
 .output {
 }
 .output pre {
-  width: 85vw;
+  max-width: 85vw;
   min-height: 100px;
   background-color: #ffffffc0;
   border: 1px solr grey;
