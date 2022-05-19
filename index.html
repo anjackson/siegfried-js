@@ -22,46 +22,11 @@
   <p>
     This web page will run the <a href="https://www.itforarchivists.com/siegfried">Siegfried format identification tool</a> (v1.9.2-PATCH) on any file you give to it.  It runs entirely in your browser, via <a href="https://github.com/golang/go/wiki/WebAssembly">Go WebAssembly</a>.
   </p>
-
-    	<!--
-	Add the following polyfill for Microsoft Edge 17/18 support:
-	<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
-	(see https://caniuse.com/#feat=textencoder)
-	-->
-	<script src="wasm_exec.js"></script>
-	<script>
-		if (!WebAssembly.instantiateStreaming) { // polyfill
-			WebAssembly.instantiateStreaming = async (resp, importObject) => {
-				const source = await (await resp).arrayBuffer();
-				return await WebAssembly.instantiate(source, importObject);
-			};
-		}
-
-		const go = new Go();
-                //go.env = { 'USER' : "", 'HOME': "" }
-		let mod, inst;
-		WebAssembly.instantiateStreaming(fetch("wasmtest.wasm"), go.importObject).then((result) => {
-			mod = result.module;
-			inst = result.instance;
-			document.getElementById("runButton").disabled = false;
-		}).catch((err) => {
-			console.error(err);
-		});
-
-		async function run() {
-			console.clear();
-			await go.run(inst);
-			inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
-		}
-	</script>
-
-	<button onclick="run();" id="runButton" disabled>Run</button>
-    
-                    <input type="file" id="fileInput"><br>
-                <output id="fileOutput"></output>
-    
-      </div>
-      </div>
+    <input type="file" id="fileInput" disabled><br>
+    <div>Output:</div>
+    <textarea id="output" style="width: 100%;" rows="10" disabled=""></textarea>
+    </div>
+    </div>
   </div>
   
     <!-- The footer holds our remix button — you can use it for structure or cut it out ✂ -->
@@ -81,5 +46,40 @@
     </footer>
   
 
+    	<!--
+	Add the following polyfill for Microsoft Edge 17/18 support:
+	<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>
+	(see https://caniuse.com/#feat=textencoder)
+	-->
+	<script src="wasm_exec.js"></script>
+	<script>
+		if (!WebAssembly.instantiateStreaming) { // polyfill
+			WebAssembly.instantiateStreaming = async (resp, importObject) => {
+				const source = await (await resp).arrayBuffer();
+				return await WebAssembly.instantiate(source, importObject);
+			};
+		}
+
+		const go = new Go();
+                //go.env = { 'USER' : "", 'HOME': "" }
+		let mod, inst;
+		WebAssembly.instantiateStreaming(fetch("sf.wasm"), go.importObject).then((result) => {
+			mod = result.module;
+			inst = result.instance;
+      // And run:
+			console.clear();
+      go.run(inst);
+      // Enable the interface:
+			document.getElementById("fileInput").disabled = false;
+		}).catch((err) => {
+			console.error(err);
+		});
+
+		async function runAndReset() {
+			await go.run(inst);
+			inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+		}
+
+	</script>
 </body>
 </html>
