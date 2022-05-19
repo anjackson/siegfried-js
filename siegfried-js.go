@@ -59,14 +59,13 @@ func main() {
 			filename := fileInput.Get("files").Call("item", 0).Get("name").String()
 			mimeType := fileInput.Get("files").Call("item", 0).Get("type").String()
 
-			log.Print("Looking at " + filename + " type " + mimeType)
+			//log.Print("Looking at '" + filename + "' with browser defined type of: " + mimeType)
+			fileOutput.Set("innerText", "Looking at '"+filename+"' (with browser-supplied MIME type: "+mimeType+")...")
 
 			out := string(dst)
 			if len(out) > 100 {
 				out = out[:100] + "..."
 			}
-
-			//fileOutput.Set("innerText", out)
 
 			r := bytes.NewReader(dst)
 
@@ -75,7 +74,7 @@ func main() {
 				log.Fatal(err)
 			}
 
-			out = ""
+			out = fileOutput.Get("innerText").String() + "\n\n"
 			for _, id := range ids {
 				out = out + id.String() + ":\n"
 				res := s.Label(id)
