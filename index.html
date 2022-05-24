@@ -23,18 +23,25 @@
     This web page will run the <a href="https://www.itforarchivists.com/siegfried">Siegfried format identification tool</a> (v1.9.3) on any file you give to it.  It runs entirely in your browser, via <a href="https://github.com/golang/go/wiki/WebAssembly">Go WebAssembly</a>.
   </p>
   <label for="sig-select">Choose a signature set:</label>
-
 <select name="signatures" id="sig-select" onchange="restart();">
-  <option value="sfsigs/default.sig">Default</option>
-  <option value="sfsigs/deluxe.sig">Deluxe</option>
-  <option value="sfsigs/archivematica.sig">Archivematica</option>
-  <option value="sfsigs/freedesktop.sig">Free Desktop</option>
-  <option value="sfsigs/loc.sig">Library of Congress</option>
-  <option value="sfsigs/tika.sig">Tika</option>
-  <option value="sfsigs/pronom-tika-loc.sig">PRONOM + Tika + LOC</option>
-  <option value="sfsigs/wikidata.sig">WikiData</option>
-  <option value="sfsigs/wikidata-nopronom.sig">WikiData (no PRONOM)</option>
-  <option value="https://www.itforarchivists.com/siegfried/latest/wikidata">WikiData - latest version from Siegfried update server - NOT WORKING YET</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest">Default (latest version)</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest/deluxe">Deluxe (latest version)</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest/archivematica">Archivematica (latest version)</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest/freedesktop">Free Desktop (latest version)</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest/loc">Library of Congress (latest version)</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest/tika">Tika (latest version)</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest/pronom-tika-loc">PRONOM + Tika + LOC (latest version)</option>
+  <option value="https://www.itforarchivists.com/siegfried/latest/wikidata">WikiData (latest version)</option>
+  <option disabled>-</option>
+  <option value="sfsigs/default.sig">Default (v1.9.3)</option>
+  <option value="sfsigs/deluxe.sig">Deluxe (v1.9.3)</option>
+  <option value="sfsigs/archivematica.sig">Archivematica (v1.9.3)</option>
+  <option value="sfsigs/freedesktop.sig">Free Desktop (v1.9.3)</option>
+  <option value="sfsigs/loc.sig">Library of Congress (v1.9.3)</option>
+  <option value="sfsigs/tika.sig">Tika (v1.9.3)</option>
+  <option value="sfsigs/pronom-tika-loc.sig">PRONOM + Tika + LOC (v1.9.3)</option>
+  <option value="sfsigs/wikidata.sig">WikiData (v1.9.3)</option>
+  <option value="sfsigs/wikidata-nopronom.sig">WikiData + no-PRONOM (v1.9.3)</option>
 </select>
     <br>
     <br>
